@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://kit.fontawesome.com/757f2c735f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src= "script.js" defer></script>
+    <title>EzClerk</title>
+</head>
+<body>
+
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label class="logo">EZCLERK</label>
+        <ul>
+            <li><a href = index.html>Search For Banks</a></li>
+            <li><a href = "howto.html">How to Use</a></li>
+            <li><a href="https://www.savethestudent.org/money/a-simple-guide-to-banking-jargon.html" target=_blank> Financial Literacy (cred. Tom Allingham) </a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Have this search bar sift thru our database -->
+        <div class="search_box">
+        <input id="search_txt" type="text" value="" placeholder="Search for banks">
+
+        <a href = "#" id = button>
+            <button id="search_btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </a>
+        </div>
+
+    <!-- Starting the database of all the banks -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.0/firebase-firestore.memory.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.0/firebase-auth.js"></script>
+    <script>
+        
+    const firebaseConfig = {
+        apiKey: "AIzaSyA1X-8YzGnIkk8gTr3ZKd66VDQPgrYcUxs",
+        authDomain: "ezclerk-1597017743292.firebaseapp.com",
+        databaseURL: "https://ezclerk-1597017743292.firebaseio.com",
+        projectId: "ezclerk-1597017743292",
+        storageBucket: "ezclerk-1597017743292.appspot.com",
+        messagingSenderId: "312787517930",
+        appId: "1:312787517930:web:357cca215587480aa17293",
+        measurementId: "G-LHT9W3LSSV"
+      };
+
+    //initialize firebase
+    firebase.initializeApp(firebaseConfig); 
+
+    //connect to the firebase
+    let db = firebase.firestore();
+
+    //get reference for the database elements
+    // let menuDiv = document.getElementById("database");
+
+    // Create a reference to the banks collection
+    let banksRef = db.collection('banks');
+
+    console.log(db);
+    console.log(banksRef);
+    
+
+    </script>
+    <p id = creds>Cred. Tom Allingham for the Financial Literacy article</p>
+</body>
+</html>
