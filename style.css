@@ -4,9 +4,12 @@
     text-decoration: none;
     list-style: none;
     box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
 }
  
 body {
+    display: flex;
+    flex-direction: column;;
     height: 100vh;
     background-color: #98fb98;
     font-family: monospace, sans-serif, round;
@@ -111,9 +114,8 @@ a.active,a:hover {
 }
 
 #creds{
-    justify-content: flex-end;
-    vertical-align: bottom;
-    padding-top: 500px;
+    margin-top:auto;
+    bottom:0;
 }
 
 #description {
@@ -162,10 +164,7 @@ a{
     justify-content: center;
     margin-top: 200px;
 }
-/*body {
-    background-color: #53d353;
-}
-*/
+
 #drop_down {
     font-size: 65%;
     background-color: rgb(45, 167, 192);
@@ -257,9 +256,16 @@ a {
 } 
 #display_box{
     width: 1000px;
-    height: 250px;
-    background:white;
+    height: xxpx;
+    background: #2f3640;
+    border: 15px solid darkgray;
     border-style: ridge;
-    border: 20px solid darkgray;
+    color: white;
+    padding: 25px;
 }
+#reach_out{
+    margin-left: -250px;
+}
+
+
 
