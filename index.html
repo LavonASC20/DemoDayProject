@@ -28,15 +28,25 @@
     <!-- div to display the results -->
     <div id = "display_box" style = "position:absolute; left:120px; top:300px;">
         <div id = results>
-            <h2>Banks:</h2>
-            
         </div>
     </div>
     
     <!-- Have this search bar sift thru our database -->
         <div class="search_box">
-        <input id="search_txt" type="text" value="" placeholder="Search for banks">
+        <input id="search_txt" list="banks" value="" placeholder="Search for banks" autocomplete="on">
+        <datalist id = "banks">
+            <option value = "BB&T">
+            <option value = "Chase">
+            <option value = "TD Bank">
+            <option value = "Capital One">
+            <option value = "Discover">
+            <option value = "PNC Bank">
+            <option value = "Bank of America">
+        </datalist>
 
+
+
+        <!-- the button to search -->
         <a href = "#" id = button>
             <button id="search_btn">
                 <i class="fas fa-search"></i>
@@ -68,31 +78,142 @@
     let db = firebase.firestore();
     console.log('success!'); 
 
-    //get reference to search bar and button
+    //get reference to search bar and button and display and website link
     let searchBar = document.getElementById("search_txt");
     let buttonRef = document.getElementById("search_btn");
+    let displayRef = document.getElementById("display_box");
 
-    //declare the textbox value variable
+    //declare the textbox value variable here to avoid scoping issues
     let searchInput;
+
+    //hide the display box until the user searches
+    displayRef.style.display = "none";
 
     //set up an onclick for the buttonRef
     buttonRef.onclick = function(event){
+        //stop page from reloading
         event.preventDefault();
+
+        //display results
+        displayRef.style.display = "block";
 
         //check if the search was entered
         searchInput = searchBar.value;
         console.log(searchInput);
 
-        //add to our database
-        db.collection("bank").add({
-        "Bank": searchInput,
+        //function by Raghuraman Kesavan to compare strings without case sensitivity
+        String.prototype.equalsIgnoreCase = function (compareString) { 
+            return this.toUpperCase() === compareString.toUpperCase(); 
+        }; 
+
+        //check if the user's search is in the database, then return the appropriate data
+        db.collection("banks").onSnapshot(function(snapshot){
+            let result, result2, result3, result4, result5, result6, result7;
+            
+            //define each link
+            let aLink = "BB&T Link";
+            result = aLink.link("https://www.bbt.com/banking/checking/student-banking.html");
+            
+            let bLink = "Bank of America Link";
+            result2 = bLink.link("https://www.bankofamerica.com/deposits/savings/savings-accounts/");
+            
+            let cLink = "Capital One Link";
+            result3 = cLink.link("https://www.capitalone.com/bank/savings-accounts/online-performance-savings-account/");
+            
+            let dLink = "Chase Link";
+            result4 = dLink.link("https://www.chase.com/personal/checking/student-checking");
+            
+            let eLink = "Discover Link";
+            result5 = eLink.link("https://bank.discover.com/newaccount/app/regular/index.html#/landing");
+            
+            let fLink = "PNC Bank Link";
+            result6 = fLink.link("https://www.pnc.com/en/personal-banking/banking/student-banking.html#vws");
+            
+            let gLink = "TD Bank Link";
+            result7 = gLink.link("https://www.td.com/us/en/personal-banking/student-services/");
+
+            //create an array to hold all of the links
+            let results = [result, result2, result3, result4, result5, result6, result7];
+
+            if(searchInput.equalsIgnoreCase("BB&T")){
+                displayRef.innerHTML = snapshot.docs[0].data().account + ": ";
+                displayRef.innerHTML += snapshot.docs[0].data().info + "<br>";
+                
+                //put it in the displayRef
+                displayRef.innerHTML += "<p>Link to website: " + result + "</p>";
+            }
+            else if(searchInput.equalsIgnoreCase("Bank of America")){
+                displayRef.innerHTML = snapshot.docs[1].data().account + ": ";
+                displayRef.innerHTML += snapshot.docs[1].data().info + "<br>";
+                
+                // put the link in displayRef
+                displayRef.innerHTML += "<p>Link to website: " + result2 + "</p>";
+            }
+            else if(searchInput.equalsIgnoreCase("Capital One")){
+                displayRef.innerHTML = snapshot.docs[2].data().account + ": ";
+                displayRef.innerHTML += snapshot.docs[2].data().info + "<br>";
+
+                // put link in displayRef
+                displayRef.innerHTML += "<p>Link to website: " + result3 + "</p>";
+            }
+            else if(searchInput.equalsIgnoreCase("Chase")){
+                displayRef.innerHTML = snapshot.docs[3].data().account + ": ";
+                displayRef.innerHTML += snapshot.docs[3].data().info + "<br>";
+                
+                // put link in displayRef
+                displayRef.innerHTML += "<p>Link to website: " + result4 + "</p>";
+            }
+            else if(searchInput.equalsIgnoreCase("Discover")){
+                displayRef.innerHTML = snapshot.docs[4].data().account + ": ";
+                displayRef.innerHTML += snapshot.docs[4].data().info + "<br>";
+
+                // put link in displayRef
+                displayRef.innerHTML += "<p>Link to website: " + result5 + "</p>";
+            }
+            else if(searchInput.equalsIgnoreCase("PNC Bank")){
+                displayRef.innerHTML = snapshot.docs[5].data().account + ": ";
+                displayRef.innerHTML += snapshot.docs[5].data().info + "<br>";
+                // put link in displayRef
+                displayRef.innerHTML += "<p>Link to website: " + result6 + "</p>";
+            }
+            else if(searchInput.equalsIgnoreCase("TD Bank")){
+                displayRef.innerHTML = snapshot.docs[6].data().account + ": ";
+                displayRef.innerHTML += snapshot.docs[6].data().info + "<br>";
+                
+                // put link in displayRef
+               displayRef.innerHTML += "<p >Link to website: " + result7 + "</p>";
+            }
+            else if(searchInput.equalsIgnoreCase("")){
+                //let user see all available banks
+                displayRef.innerHTML = "Not sure what you want to search? Here are a few banks and accounts: <br> <br>";
+                //iterate through database and display the data
+                for(let i = 0; i < snapshot.docs.length; i++){
+                    //add the bank account to the display
+                    displayRef.innerHTML += snapshot.docs[i].data().account + ": ";
+                    //put the info associated with the bank
+                    displayRef.innerHTML += snapshot.docs[i].data().info + "<br>";
+                    //put the link
+                    displayRef.innerHTML += results[i] + "<br><br>";
+                }
+            }
+            else{
+                //let user know that the entry does not exist
+                displayRef.innerHTML = "Bank is not in directory yet, here are all the listings: <br><br>";
+
+                //iterate through database and display the data
+                for(let i = 0; i < snapshot.docs.length; i++){
+                    //add the bank account to the display
+                    displayRef.innerHTML += snapshot.docs[i].data().account + ": ";
+                    //put the info associated with the bank
+                    displayRef.innerHTML += snapshot.docs[i].data().info + "<br>";
+                    //put the link
+                    displayRef.innerHTML += results[i] + "<br><br>";
+                }
+            }
         });
     }
 
-    </script>
-
-
-    <p id = creds>Cred. Tom Allingham for the Financial Literacy article</p>
+    </script>   
 
 </body>
 </html>
